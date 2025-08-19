@@ -66,7 +66,13 @@
         // Helper function to create test result element
         function createTestResult(testName, passed, message) {
             const div = document.createElement('div');
-            div.className = `test-result ${passed ? 'pass' : 'fail'}`;
+// Helper function to create test result element
+        function createTestResult(testName, passed, message) {
+            const div = document.createElement('div');
+            div.className = passed ? 'test-result pass' : 'test-result fail';
+            div.innerHTML = `<strong>${testName}:</strong> ${passed ? 'PASS' : 'FAIL'} - ${message}`;
+            return div;
+        }
             div.innerHTML = `<strong>${testName}:</strong> ${passed ? 'PASS' : 'FAIL'} - ${message}`;
             return div;
         }
