@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch Tests</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .pass {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .fail {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .test-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stopwatch Functionality Tests</h1>
+    
+    <div class="test-container">
+        <div class="test-title">CSS Enhancement Tests</div>
+        <div id="css-tests"></div>
+    </div>
+    
+    <div class="test-container">
+        <div class="test-title">JavaScript Functionality Tests</div>
+        <div id="js-tests"></div>
+    </div>
+    
+    <div class="test-container">
+        <div class="test-title">HTML Structure Tests</div>
+        <div id="html-tests"></div>
+    </div>
+
+    <script>
+        // Test results container
+        const cssTests = document.getElementById('css-tests');
+        const jsTests = document.getElementById('js-tests');
+        const htmlTests = document.getElementById('html-tests');
+
+        // Helper function to create test result element
+        function createTestResult(testName, passed, message) {
+            const div = document.createElement('div');
+// Helper function to create test result element
+        function createTestResult(testName, passed, message) {
+            const div = document.createElement('div');
+            div.className = passed ? 'test-result pass' : 'test-result fail';
+            div.innerHTML = `<strong>${testName}:</strong> ${passed ? 'PASS' : 'FAIL'} - ${message}`;
+            return div;
+        }
+            div.innerHTML = `<strong>${testName}:</strong> ${passed ? 'PASS' : 'FAIL'} - ${message}`;
+            return div;
+        }
+
+        // Load the stopwatch HTML content for testing
+        fetch('stopwatch.html')
+            .then(response => response.text())
+            .then(html => {
+                // Parse the HTML
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // Test 1: Check if CSS is present
+                const styleTag = doc.querySelector('style');
+                const hasCss = styleTag && styleTag.textContent.length > 100;
+                cssTests.appendChild(createTestResult(
+                    'CSS Presence', 
+                    hasCss, 
+                    hasCss ? 'CSS styles found in the document' : 'No significant CSS found'
+                ));
+
+                // Test 2: Check for modern CSS features
+                const cssContent = styleTag ? styleTag.textContent : '';
+                const hasModernCss = cssContent.includes('flexbox') || cssContent.includes('display: flex') || 
+                                   cssContent.includes('grid') || cssContent.includes('backdrop-filter');
+                cssTests.appendChild(createTestResult(
+                    'Modern CSS Features', 
+                    hasModernCss, 
+                    hasModernCss ? 'Modern CSS features detected' : 'No modern CSS features found'
+                ));
+
+                // Test 3: Check for responsive design
+                const hasResponsive = cssContent.includes('@media');
+                cssTests.appendChild(createTestResult(
+                    'Responsive Design', 
+                    hasResponsive, 
+                    hasResponsive ? 'Media queries found for responsive design' : 'No responsive design detected'
+                ));
+
+                // Test 4: Check for animations
+                const hasAnimations = cssContent.includes('@keyframes') || cssContent.includes('animation:');
+                cssTests.appendChild(createTestResult(
+                    'CSS Animations', 
+                    hasAnimations, 
+                    hasAnimations ? 'CSS animations found' : 'No CSS animations detected'
+                ));
+
+                // Test 5: Check HTML structure
+                const hasContainer = doc.querySelector('.container');
+                htmlTests.appendChild(createTestResult(
+                    'Container Structure', 
+                    !!hasContainer, 
+                    hasContainer ? 'Container element found' : 'No container element found'
+                ));
+
+                // Test 6: Check for h1 element
+                const hasH1 = doc.querySelector('h1');
+                htmlTests.appendChild(createTestResult(
+                    'H1 Element', 
+                    !!hasH1, 
+                    hasH1 ? 'H1 element found for counter display' : 'No H1 element found'
+                ));
+
+                // Test 7: Check for title improvement
+                const title = doc.querySelector('title');
+                const hasGoodTitle = title && title.textContent !== 'Document' && title.textContent.length > 5;
+                htmlTests.appendChild(createTestResult(
+                    'Improved Title', 
+                    hasGoodTitle, 
+                    hasGoodTitle ? `Title: "${title.textContent}"` : 'Title not improved from default'
+                ));
+
+                // Test 8: Check JavaScript functionality
+                const hasScript = doc.querySelector('script');
+                const scriptContent = hasScript ? hasScript.textContent : '';
+                const hasCounter = scriptContent.includes('setInterval') && scriptContent.includes('x=x+1');
+                jsTests.appendChild(createTestResult(
+                    'Counter Logic', 
+                    hasCounter, 
+                    hasCounter ? 'Counter increment logic found' : 'Counter logic missing or modified'
+                ));
+
+                // Test 9: Check for DOM manipulation
+                const hasDomUpdate = scriptContent.includes('querySelector') && scriptContent.includes('innerHTML');
+                jsTests.appendChild(createTestResult(
+                    'DOM Updates', 
+                    hasDomUpdate, 
+                    hasDomUpdate ? 'DOM update logic found' : 'DOM update logic missing'
+                ));
+
+                // Test 10: Check for visual enhancements
+                const hasVisualEnhancements = cssContent.includes('background:') || cssContent.includes('color:') || 
+                                            cssContent.includes('box-shadow') || cssContent.includes('border-radius');
+                cssTests.appendChild(createTestResult(
+                    'Visual Enhancements', 
+                    hasVisualEnhancements, 
+                    hasVisualEnhancements ? 'Visual styling enhancements found' : 'No visual enhancements detected'
+                ));
+            })
+            .catch(error => {
+                const errorDiv = createTestResult('File Loading', false, `Error loading stopwatch.html: ${error.message}`);
+                cssTests.appendChild(errorDiv);
+            });
+    </script>
+</body>
+</html>
